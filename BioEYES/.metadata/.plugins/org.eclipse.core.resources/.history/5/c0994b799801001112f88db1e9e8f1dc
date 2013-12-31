@@ -1,0 +1,49 @@
+import java.io.FileOutputStream;
+import java.util.*;
+import java.io.*;
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.*;
+
+ 
+public class PDFCreator {
+	public static void main(String[] args) throws IOException, DocumentException {
+		Document document = new Document();
+		document.setPageSize(PageSize.LETTER); 
+		document.setMargins(0,0,0,0);
+		String customName = "test2.pdf";
+		String sessionID = "default";
+		String barCode = "default";
+		String surveyType = "Advanced Post 2011.pdf";
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(customName));
+		document.open();
+		importSurvey(document, writer, surveyType);
+		createPdf(document, writer, sessionID, barCode);
+	}
+	public static void importSurvey(Document document, PdfWriter writer, String surveyType)throws IOException, DocumentException{
+		PdfReader reader = new PdfReader(surveyType);
+		for (int i = 1; i <= 2; i++) {
+			PdfImportedPage page = writer.getImportedPage(reader, i);
+			Image img = Image.getInstance(page);
+			document.add(img);
+		}	 
+	}
+	public static void createPdf(Document document, PdfWriter writer, String sessionID, String barCode) throws IOException, DocumentException {
+		PdfContentByte over = writer.getDirectContent();
+		document.newPage();
+		//Add SessionID
+		over.beginText();
+		BaseFont bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
+		over.setFontAndSize(bf, 12);
+		over.setTextRenderingMode(PdfContentByte.TEXT_RENDER_MODE_FILL);
+		over.showTextAligned(Element.ALIGN_CENTER, sessionID,510,143,0);
+		over.endText();
+		//Add Barcode
+		BarcodeQRCode qrcode = new BarcodeQRCode(barCode, 140, 140, null);
+		Image img = qrcode.getImage();
+		//How to set the correct coordinates???
+		//How to remove white bars???
+		img.setAbsolutePosition(440, 175);
+		document.add(img);	
+		document.close();
+    } 
+ }

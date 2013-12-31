@@ -1,0 +1,51 @@
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import org.apache.poi.POITextExtractor.*;
+
+public class SurveyGenerator{
+	public static void main(String[] args){
+		try {
+			FileInputStream fileInputStream = new FileInputStream("University of Pennsylvania Session Database.xlsx");
+			XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+			Sheet worksheet = workbook.getSheet("Blank");
+			CreationHelper createHelper = workbook.getCreationHelper();
+			FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+			workbook.setMissingCellPolicy(Row.CREATE_NULL_AS_BLANK);
+			int rownum = 2;	
+				boolean allcreated = false;
+					while (allcreated == false){
+						Row row = worksheet.getRow(rownum);	
+						Cell status = row.getCell((short)12);
+						Cell preCode = row.getCell((short)17);
+						Cell postCode = row.getCell((short)18);
+						CellValue cellpreEvaluated = evaluator.evaluate(preCode);
+						CellValue cellpostEvaluated = evaluator.evaluate(postCode);
+						String cellpreValue = cellpreEvaluated.getStringValue();
+						String cellpostValue = cellpostEvaluated.getStringValue();
+						String sessionID = evaluator.evaluate(row.getCell((short)16)).getStringValue();
+					if(status.getCellType() == Cell.CELL_TYPE_BLANK) {
+						if(cellpreValue.equals(",,,,,PRE,,") && cellpostValue.equals(",,,,,POST,,")){
+							allcreated = true;
+						} else {
+							System.out.println(cellpreEvaluated.getStringValue());
+							System.out.println("          " + cellpostEvaluated.getStringValue());
+							System.out.println("                  " + sessionID);
+							rownum++;
+						}
+					}else{
+						rownum++;
+					}
+				}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+<fullyQualifiedTypeName name="BioEYESLogic.SurveyGenerator"/>
+<fullyQualifiedTypeName name="javax.swing.filechooser.FileNameExtensionFilter"/>
+<fullyQualifiedTypeName name="javax.swing.filechooser.FileFilter"/>
+<fullyQualifiedTypeName name="java.nio.channels.FileChannel"/>
+<fullyQualifiedTypeName name="java.io.RandomAccessFile"/>
+<fullyQualifiedTypeName name="java.nio.channels.FileLock"/>
+</qualifiedTypeNameHistroy>
